@@ -47,9 +47,21 @@ app.use(express.static(__dirname + "/public"));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
-// app.use(logger("dev"))
 app.use(cookieParser("palabraparafirmarcookies"))
 
+
+//SWAGGER DOCUMENTACION
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.1",
+        info: {
+            title: "Documentacion del proyecto",
+            description:"Descripcion del proyecto"
+        }
+
+    },
+    apis: []
+}
 // //SESSION WITH PASSPORT 
 initializePassport()
 app.use(passport.initialize())
