@@ -40,13 +40,7 @@ res.cookie("cookieToken", token,{
     maxAge: 60 * 60 * 1000 *24,
     httpOnly: true
 })
-// .send({
-//     status: "success",
-//     usersCreate: result, 
-//     token
-// })
-
-        // Redirigir al usuario a la página de inicio de sesión
+ // Redirigir al usuario a la página de inicio de sesión
         res.redirect('/login');
     } catch (error) {
         res.send({status: "error", error })
@@ -54,7 +48,7 @@ res.cookie("cookieToken", token,{
 
 }
 
-// //LOGIN
+
 // //LOGIN
 login = async (req, res) => {
     try {
@@ -90,51 +84,6 @@ req.logger.error("Error al iniciar sesión:", error);
     }
 }
 
-// login = async (req, res) => {
-//     try {
-//         const { email, password } = req.body;
-
-//         // Verificar las credenciales del usuario
-//         const user = await this.userService.getUserBy({ email });
-//         if (!isValidPassword(password, user.password)) {
-//             return res.status(401).send("Contraseña incorrecta");
-//         }
-
-//         // TOKEN
-//         const tokenPayload = {
-//             _id: user._id,
-//             email: user.email,
-//             role: user.role,
-//             cartID: user.cartID 
-//         };
-//         const token = generateToken(tokenPayload);
-//         console.log("Token:", token);
-
-//         // ver si el usuario tiene un carrito a sociado y si ain existe 
-//         if (!user.cartID || !(await this.cartService.cartExists(user.cartID))) {
-//         //creo uno si no existe en la base de datos o no esta asociado 
-//             const newCart = await this.cartService.createCart();
-//             //actualizo el ID del carrito 
-//             await this.userService.updateUser(user._id, { cartID: newCart._id });
-//             console.log("inicio de sesion, id carrito", newCart);
-//         }
-
-//         // Almacenar el token en una cookie
-//         res.cookie("cookieToken", token, {
-//             maxAge: 60 * 60 * 1000 * 24, 
-//             httpOnly: true,
-//         });
-
-//         // Redireccionar al usuario a la página de productos
-//         res.redirect("/products");
-//     } catch (error) {
-//         console.error("Error al iniciar sesión:", error);
-//         res.status(500).send({ status: "error", error });
-//     }
-// }
-
-
-
 //CURRENT
 current = async (req, res) => {
     try {
@@ -163,16 +112,10 @@ githubcallback = async(req, res) => {
     try {
         if (!req.user) {
         
-            return res.status(401).json({ status: "error", error: "User not authenticated" });
-        }
-
-        
-        const token = generateToken(req.user);
-
-        
+        return res.status(401).json({ status: "error", error: "User not authenticated" });
+    }
+    const token = generateToken(req.user);
         res.cookie('cookieToken', token, { httpOnly: true });
-
-        
         res.redirect("/products");
     } catch (error) {
         req.logger.error("Error en githubcallback:", error);

@@ -27,9 +27,9 @@ import router from "./routes/userFaker.router.js";
 import userFakeRouter from "./routes/userFaker.router.js";
 import passwordRouter from "./routes/password.router.js";
 import { handleErrors } from "./middleware/errors/index.js";
-import { addLogger, logger } from "./utils/logger.js";
-
-
+import { addLogger, logger} from "./middleware/logger.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express" 
 
 
 const productManager = new ProductsManagerMongo() 
@@ -41,7 +41,7 @@ const cartManager = new CartManager()
 const app= express();
 const PORT= configObject.port
 
-
+// app.use(logger('dev'))
 
 app.use(express.static(__dirname + "/public"));
 
@@ -60,8 +60,12 @@ const swaggerOptions = {
         }
 
     },
-    apis: []
+    apis: [`${__dirname}/docs/**/*.yaml`]
+
 }
+
+const specs = swaggerJSDoc(swaggerOptions)
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 // //SESSION WITH PASSPORT 
 initializePassport()
 app.use(passport.initialize())

@@ -65,16 +65,7 @@ createUser = async (req, res, next)=>{
       next (error)
     }
 }
-// async createUser(req, res) {
-//     try {
-//         const { first_name, last_name, email, password } = req.body;
-//         const userNew = new UserDto({ first_name, last_name, email, password });
-//         const result = await this.service.createUser(userNew);
-//         res.status(201).json({ status: "success", user: result });
-//     } catch (error) {
-//         res.status(400).json({ status: "error", message: error.message });
-//     }
-// }
+
 
 // Actualiza el usuario
 async updateUser(req, res) {
@@ -118,9 +109,9 @@ async userRole (req, res){
 
     res.status(200).json({ message: `Rol de usuario ${user.role === 'premium' ? 'actualizado a premium' : 'actualizado a user'}` });
     } catch (error) {
-    console.error('Error al cambiar el rol del usuario:', error);
+    req.logger.error('Error al cambiar el rol del usuario:', error);
     res.status(500).send('Error al cambiar el rol del usuario');
     }
 }
-    }
+}
 

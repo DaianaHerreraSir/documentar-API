@@ -7,16 +7,16 @@ async getProducts(){
       const products = await productModel.find();
       return products;
     } catch (error) {
-      req.logger.error('Error al obtener todos los productos:', error);
+      console.error('Error al obtener todos los productos:', error);
       throw error;
     }
   }
 
-  async getProduct(productId) {
+async getProduct(productId) {
     try {
       const product = await productModel.findById(productId);
 
-      req.logger.info('Producto recuperado:', product);
+      console.log('Producto recuperado:', product);
       if (!product) {
         throw new Error('Producto no encontrado');
       }
@@ -24,7 +24,7 @@ async getProducts(){
 
       return product;
     } catch (error) {
-      req.logger.error('Error en getProduct:', error);
+      console.error('Error en getProduct:', error);
       throw error;
     }
 }
@@ -40,20 +40,20 @@ async createProduct(productNew) {
       return fullProduct;
 
     } catch (error) {
-      req.logger.error('Error en createProduct:', error);
+      console.error('Error en createProduct:', error);
       throw error;
     }
   }
 
 
-  async updateProduct(pid, updatedData) {
+async updateProduct(pid, updatedData) {
     try {
       
       return await productModel.findByIdAndUpdate(pid, updatedData, { new: true });
 
     } 
     catch (error) {
-      req.logger.error('Error en updateProduct:', error);
+      console.error('Error en updateProduct:', error);
       throw error;
     }
   }
@@ -65,7 +65,7 @@ async deleteProduct(pid) {
 
     } 
     catch (error) {
-      req.logger.error('Error en deleteProduct:', error);
+      console.error('Error en deleteProduct:', error);
       throw error;
     }
   }
@@ -103,7 +103,7 @@ async deleteProduct(pid) {
         nextPage: hasNextPage ? page + 1 : null
       };
     } catch (error) {
-      req.logger.error('Error en paginate:', error);
+      console.error('Error en paginate:', error);
       throw error;
     }
   }  

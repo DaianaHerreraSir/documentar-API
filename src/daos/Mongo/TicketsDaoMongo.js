@@ -6,7 +6,7 @@ class TicketDaoMongo {
             const createdTicket = await ticketsModel.create(ticketData);
             return createdTicket;
         } catch (error) {
-            req.logger.error('Error al crear el ticket:', error);
+            console.error('Error al crear el ticket:', error);
             throw error;
         }
     }

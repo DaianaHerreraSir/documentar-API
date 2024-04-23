@@ -5,80 +5,74 @@ import usersModel from "./models/users.model.js";
 
 class CartDaoMongo {
 
-  async createCart() {
-    try {
-      const newCart = await cartModel.create({ products: [] });
-      req.logger.info('Nuevo carrito creado:', newCart);
-      return newCart;
-    } catch (error) {
-      req.logger.error('Error en createCart:', error);
+async createCart() {
+  try {
+    const newCart = await cartModel.create({ products: [] });
+    console.log('Nuevo carrito creado:', newCart);
+    return newCart;
+  } catch (error) {
+    console.error('Error en createCart:', error);
+    throw error;
+    }
+}
+
+async getCart(cid) {
+  try {
+    const cart = await cartModel.findById(cid).populate("products.product").lean();
+    console.log(cart);
+    return cart; // 
+} catch (error) {
+    console.error('Error en getCart:', error);
       throw error;
     }
+}
+
+async cartExists(cartId) {
+  try {
+// busca el carrito en la base de datos
+    const cart = await cartModel.findById(cartId);
+    return !!cart;
+} catch (error) {
+    console.error("Error al verificar si el carrito existe:", error);
+      return false; 
   }
-  
-  async getCart(cid) {
-    try {
-        const cart = await cartModel.findById(cid).populate("products.product").lean();
-        req.logger.info(cart);
-      
-
-        return cart; // 
-    } catch (error) {
-        req.logger.error('Error en getCart:', error);
-        throw error;
-    }
 }
 
-  
-  async cartExists(cartId) {
-    try {
-        // busca el carrito en la base de datos
-        const cart = await cartModel.findById(cartId);
-        return !!cart;
-
-    } catch (error) {
-        req.logger.error("Error al verificar si el carrito existe:", error);
-        return false; 
-    }
-}
-
- async cartExists(cartId) {
-    try {
-        // busca el carrito en la base de datos
-        const cart = await cartModel.findById(cartId);
-        return !!cart;
-
-    } catch (error) {
-        req.logger.error("Error al verificar si el carrito existe:", error);
-        return false; 
-    }
+async cartExists(cartId) {
+  try {
+// busca el carrito en la base de datos
+    const cart = await cartModel.findById(cartId);
+    return !!cart;
+} catch (error) {
+    console.error("Error al verificar si el carrito existe:", error);
+    return false; 
+  }
 }
 async getCartProducts(cid) {
   try {
-      const cart = await cartModel.findById(cid).populate('products.product').lean();
-     
+    const cart = await cartModel.findById(cid).populate('products.product').lean();
       if (cart) {
-          return cart.products
-      } else {
-        req.logger.info("Carrito no encontrado");
-          return [];
-      }
-  } catch (error) {
-      req.logger.error('Error en getCartProducts:', error);
-      throw error;
+        return cart.products
+} else {
+    console.log("Carrito no encontrado");
+        return [];
+    }
+} catch (error) {
+    console.error('Error en getCartProducts:', error);
+    throw error;
   }
 }
 
 async newCart() {
-    try {
-      const newCart = { products: [] };
-      await cartModel.create(newCart);
-      return newCart;
-    } catch (error) {
-     req.logger.error('Error en newCart:', error);
-      throw error;
-    }
+  try {
+    const newCart = { products: [] };
+    await cartModel.create(newCart);
+    return newCart;
+} catch (error) {
+    console.error('Error en newCart:', error);
+    throw error;
   }
+}
 
 async addProductToCart(cid, pid, title, description, price, quantity = 1, res) {
   try {
@@ -87,28 +81,25 @@ async addProductToCart(cid, pid, title, description, price, quantity = 1, res) {
     throw new Error('Carrito no encontrado');
     }
 
-    // Ver si el producto ya existe en el carrito
-    const existingProductIndex = cart.products.findIndex(entry => entry.product.equals(pid));
+// Ver si el producto ya existe en el carrito
+  const existingProductIndex = cart.products.findIndex(entry => entry.product.equals(pid));
 
-    if (existingProductIndex !== -1) {
-  // Si el producto ya existe, aumenta su cantidad
+  if (existingProductIndex !== -1) {
+// Si el producto ya existe, aumenta su cantidad
     cart.products[existingProductIndex].quantity += quantity;
-        } else {
-    // Sino  lo agregarla al carrito
+} else {
+// Sino  lo agregarla al carrito
     cart.products.push({ product: pid, quantity });
-        }
-
+  }
     const updatedCart = await cart.save();
-
-    if (res) {
-            res.json(updatedCart);
-        }
-
-      return updatedCart;
-    } catch (error) {
-       req.logger.error('Error en addProductToCart:', error);
-        throw error;
-    }
+if (res) {
+    res.json(updatedCart);
+  }
+    return updatedCart;
+} catch (error) {
+    console.error('Error en addProductToCart:', error);
+      throw error;
+  }
 }
 
 async updateCartProducts(cid, products, res) {
@@ -139,7 +130,7 @@ async updateCartProducts(cid, products, res) {
       });
     } 
     else {
-      req.logger.warn(`Producto con ID ${pid} no encontrado`);
+      console.warn(`Producto con ID ${pid} no encontrado`);
           }
   }
 }
@@ -153,7 +144,7 @@ async updateCartProducts(cid, products, res) {
 
     return updatedCart;
     } catch (error) {
-    req.logger.error('Error en updateCartProducts:', error);
+    console.error('Error en updateCartProducts:', error);
     throw error;
     }
   }
@@ -167,7 +158,7 @@ async deleteCart(cid) {
     return deletedCart;
   } 
   catch (error) {
-    req.logger.error('Error en deleteCart:', error);
+    console.error('Error en deleteCart:', error);
     throw error;
     }
 }
@@ -195,7 +186,7 @@ const index = cart.products.findIndex(entry => entry.product && entry.product.eq
       }
   } 
   catch (error) {
-    req.logger.error('Error en removeProductFromCart:', error);
+    console.error('Error en removeProductFromCart:', error);
     throw error;
   }
 
@@ -223,7 +214,7 @@ const index = cart.products.findIndex(entry => entry.product && entry.product.eq
         throw new Error('Producto no encontrado en el carrito');
       }
     } catch (error) {
-      req.logger.error('Error en removeProductFromCart:', error);
+      console.error('Error en removeProductFromCart:', error);
       throw error;
     }
   }
@@ -234,7 +225,7 @@ const index = cart.products.findIndex(entry => entry.product && entry.product.eq
         const cart = await cartModel.findById(cartId).populate('products.product');
         return cart;
     } catch (error) {
-        req.logger.error('Error al obtener el carrito:', error);
+        console.error('Error al obtener el carrito:', error);
         throw error;
     }
 }

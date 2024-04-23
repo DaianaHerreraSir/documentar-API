@@ -107,31 +107,6 @@ createProduct = async (req, res, next) => {
     }
 }
 
-    // createProduct =  async (req, res) => {
-
-    //     const { title, description, price, thumbnail, code, stock, status = true, category } = req.body[0];
-        
-    //     const productNew = {
-    //     title,
-    //     description,
-    //     price,
-    //     thumbnail,
-    //     code,
-    //     stock,
-    //     status,
-    //     category,
-    //     };
-
-    //     try {
-    //     const createdProduct = await this.productService.createProduct(productNew);
-    //     res.send({ success: true, message: 'Producto creado exitosamente', product: createdProduct });
-    //     } 
-    //     catch (error) {
-    //     console.log(error);
-    //     res.status(500).send("Error interno del servidor");
-    //     }
-    // }
-
 //ACTUALIZAR UN PRODUCTO
     updateProduct =async (req, res) => {
 
@@ -176,17 +151,3 @@ deletProduct = async (req, res) => {
     }
 }
 }
-//     deletProduct = async (req, res) => {
-
-//         const { pid } = req.params;
-        
-//         try {
-//         const result = await this.productService.deleteProduct(pid);
-//         res.send(result);
-//         } 
-//         catch (error) {
-//         console.log(error);
-//         res.status(500).send("Error interno del servidor");
-//         }
-//     }
-// }
